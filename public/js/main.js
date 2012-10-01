@@ -21,7 +21,7 @@ require.config({
 /*
  * Setup the app
  */
-require(['jquery', 'backbone', 'appRouter', 'dispatcher' ],
+require(['jquery', 'backbone', 'appRouter', 'dispatcher', 'vendor/bootstrap' ],
   function($, Backbone, appRouter, dispatcher){
     $(document).ready(function() {
 

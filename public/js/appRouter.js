@@ -7,12 +7,18 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher', 'views/navMenu'],
     var AppRouter = Backbone.Router.extend({
 
       routes: {
-        '*root': 'root'
+        '': 'root',
+        '/users': 'users'
       },
 
       root: function() {
         // init the view
         var navMenu = new NavMenu({ el: $('.nav-menu')});
+        navMenu.initDropdowns();
+      },
+
+      users: function() {
+        
       }
     });
 
