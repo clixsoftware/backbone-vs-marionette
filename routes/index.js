@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 // register routes
-var files = ['home'];
+var files = ['home', 'api'];
 
 exports.init = function(app) {
   for(i in files) {

@@ -2,8 +2,11 @@
  * View for the menu
  */
 
-define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbone, dispatcher) {
+define(['jquery', 'underscore', 'backbone', 'dispatcher', 'bootstrap'], function($, _, Backbone, dispatcher) {
   var NavMenu = Backbone.View.extend({
+    initialize: function() {
+      console.log(this.$el);
+    },
     events: {
       'click .nav-menu-link': 'navigateTo'
     },

@@ -10,6 +10,7 @@
     "ejs": "*",
     "express-ejs-layouts": "*",
     "less-middleware": "*",
-    "requirejs": "*"
+    "requirejs": "*",
+    "sqlite3": "2.x.x"
   }
 }
