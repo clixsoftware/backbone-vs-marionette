@@ -1,5 +1,6 @@
 /*
- * Think global event/notification center
+ * Think global event/notification center.
+ * Singleton.
  */
 
 (function() {

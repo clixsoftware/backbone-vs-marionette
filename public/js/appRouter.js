@@ -15,6 +15,7 @@ define(['jquery',
 
       routes: {
         '': 'root',
+        'users/:id': 'user',
         'users*query': 'users',
         'admins*query': 'admins',
         'customers*query': 'admins',
@@ -30,13 +31,28 @@ define(['jquery',
 
       root: function() {
         var rootContent = new RootContent();
-        this.mainContainer.showView(rootContent);
+        this.mainContainer.pushView(rootContent, true);
       },
 
       users: function(query) {
         console.log('users');
-        var usersGridView = new UsersContent.UsersGridView();
-        this.mainContainer.showView(usersGridView);
+        var usersList = new UsersContent.UsersList();
+        var router = this;
+        usersList.fetch({
+          success: function(collection, response) {
+            var usersGridView = new UsersContent.UsersGridView({
+              collection: collection
+            });
+            router.mainContainer.pushView(usersGridView, true);
+          },
+          error: function(collection, xhr) {
+            // ignore error
+          }
+        });
+      },
+
+      user: function(id) {
+        console.log('user details: ' + id);
       },
 
       admins: function(query) {
