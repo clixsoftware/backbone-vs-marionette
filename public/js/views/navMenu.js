@@ -8,7 +8,8 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher', 'bootstrap'], function
       console.log(this.$el);
     },
     events: {
-      'click .nav-menu-link': 'navigateTo'
+      'click .nav-menu-link': 'navigateTo',
+      'click .nav-menu-logo': 'navigateTo'
     },
     navigateTo: function(ev) {
       ev.preventDefault();

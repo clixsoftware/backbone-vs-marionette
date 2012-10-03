@@ -16,7 +16,10 @@ require.config({
       exports: function($, _) {
         $.noConflict();
         _.noConflict();
-        _.templateSettings = { interpolate: /\{\{(.+?)\}\}/g };
+        _.templateSettings = {
+          interpolate: /\{\{=(.+?)\}\}/g,
+          evaluate: /\{\{(.+?)\}\}/g
+        };
         return this.Backbone.noConflict();
       }
     }

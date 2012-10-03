@@ -7,14 +7,17 @@ define(['jquery',
   'dispatcher',
   'views/mainContainer',
   'views/navMenu',
-  'views/rootContent'],
-  function($, _, Backbone, dispatcher, MainContainer, NavMenu, RootContent) {
+  'views/rootContent',
+  'views/usersContent'],
+  function($, _, Backbone, dispatcher, MainContainer, NavMenu, RootContent, UsersContent) {
 
     var AppRouter = Backbone.Router.extend({
 
       routes: {
         '': 'root',
         'users*query': 'users',
+        'admins*query': 'admins',
+        'customers*query': 'admins',
         'reports': 'reports'
       },
 
@@ -32,6 +35,16 @@ define(['jquery',
 
       users: function(query) {
         console.log('users');
+        var usersGridView = new UsersContent.UsersGridView();
+        this.mainContainer.showView(usersGridView);
+      },
+
+      admins: function(query) {
+        console.log('admins');
+      },
+
+      customers: function(query) {
+        console.log('customers');
       },
 
       reports: function() {
