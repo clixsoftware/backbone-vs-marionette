@@ -26,5 +26,5 @@ define(['jquery'], function($) {
     };
   };
 
-  return MainContainer;
+  return new MainContainer($('#main-container'));
 });

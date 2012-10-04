@@ -6,10 +6,8 @@ define(['jquery',
   'backbone',
   'dispatcher',
   'views/mainContainer',
-  'views/navMenu',
-  'views/rootContent',
-  'views/usersContent'],
-  function($, _, Backbone, dispatcher, MainContainer, NavMenu, RootContent, UsersContent) {
+  'views/navMenu'],
+  function($, _, Backbone, dispatcher, mainContainer, NavMenu) {
 
     var AppRouter = Backbone.Router.extend({
 
@@ -22,33 +20,22 @@ define(['jquery',
         'reports': 'reports'
       },
 
-      initialize: function() {
-        // main.js may be a better location for these kind of inits
-        this.mainContainer = new MainContainer($('#main-container'));
+      initialize: function(options) {
+        this.userController = options.userController;
+        this.rootController = options.rootController;
+        this.mainContainer = mainContainer;
         this.navMenu = new NavMenu({ el: $('.nav-menu')});
         this.navMenu.initDropdowns();
       },
 
       root: function() {
-        var rootContent = new RootContent();
-        this.mainContainer.pushView(rootContent, true);
+        console.log('root');
+        this.rootController.showRoot();
       },
 
       users: function(query) {
         console.log('users');
-        var usersList = new UsersContent.UsersList();
-        var router = this;
-        usersList.fetch({
-          success: function(collection, response) {
-            var usersGridView = new UsersContent.UsersGridView({
-              collection: collection
-            });
-            router.mainContainer.pushView(usersGridView, true);
-          },
-          error: function(collection, xhr) {
-            // ignore error
-          }
-        });
+        this.userController.showUsersGrid();
       },
 
       user: function(id) {

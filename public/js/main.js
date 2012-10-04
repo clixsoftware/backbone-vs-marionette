@@ -29,16 +29,25 @@ require.config({
 /*
  * Setup the app
  */
-require(['jquery', 'backbone', 'appRouter', 'dispatcher'],
-  function($, Backbone, AppRouter, dispatcher){
+require(['jquery',
+ 'backbone',
+ 'appRouter',
+ 'dispatcher',
+ 'controllers/rootController',
+ 'controllers/userController'], function($, Backbone, AppRouter, dispatcher, RootController, UserController){
     $(document).ready(function() {
+
       // create the router, start tracking
-      var appRouter = new AppRouter();
+      var appRouter = new AppRouter({
+        userController: new UserController(),
+        rootController: new RootController()
+      });
+
       Backbone.history.start({ pushState: true });
 
       // hook up navigate events
-      dispatcher.on('navigate', function(route) {
-        appRouter.navigate(route, { trigger: true });
+      dispatcher.on('navigate', function(options) {
+        appRouter.navigate(options.route, { trigger: true });
       });
     });
   }

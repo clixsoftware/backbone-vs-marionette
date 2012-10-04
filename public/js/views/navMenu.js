@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher', 'bootstrap'], function
     navigateTo: function(ev) {
       ev.preventDefault();
       var el = $(ev.target);
-      dispatcher.trigger('navigate', el.attr('href'));
+      dispatcher.trigger('navigate', { route: el.attr('href') });
     },
     initDropdowns: function() {
       this.$el.find('.dropdown-toggle').dropdown();

@@ -1,5 +1,5 @@
 /*
- * Shows a table with all users
+ * All user related stuff
  */
 
 define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbone, dispatcher) {
@@ -9,7 +9,6 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
   });
 
   var UserRowView = Backbone.View.extend({
-    model: null, // passed in from ctr args
     template: _.template($('#user-row-view').html()),
     tagName: 'tr',
     className: 'grid-row',
@@ -24,7 +23,10 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     },
 
     selected: function() {
-      dispatcher.trigger('navigate', '/users/' + this.model.get('id'));
+      dispatcher.trigger('navigate', {
+        route: '/users/' + this.model.get('id'),
+        model: this.model
+      });
     },
 
     close: function() {
@@ -65,10 +67,25 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     }
   });
 
+  var UserDetailsView = Backbone.View.extend({
+    template: _.template($('#user-details-view').html()),
+    className: 'row user-details',
+
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    },
+
+    close: function() {
+      this.off();
+    }
+  });
+
   return {
     UserModel: UserModel,
     UsersList: UsersList,
     UserRowView: UserRowView,
-    UsersGridView: UsersGridView
+    UsersGridView: UsersGridView,
+    UserDetailsView: UserDetailsView
   };
 });
