@@ -34,21 +34,11 @@ require(['jquery',
  'appRouter',
  'dispatcher',
  'controllers/rootController',
- 'controllers/userController'], function($, Backbone, AppRouter, dispatcher, RootController, UserController){
+ 'controllers/userController'], function($, Backbone, appRouter, dispatcher, rootController, userController){
     $(document).ready(function() {
-
-      // create the router, start tracking
-      var appRouter = new AppRouter({
-        userController: new UserController(),
-        rootController: new RootController()
-      });
-
+      rootController.initEvents(appRouter);
+      userController.initEvents(appRouter);
       Backbone.history.start({ pushState: true });
-
-      // hook up navigate events
-      dispatcher.on('navigate', function(options) {
-        appRouter.navigate(options.route, { trigger: true });
-      });
     });
   }
 );

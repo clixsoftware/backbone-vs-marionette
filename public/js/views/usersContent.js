@@ -23,10 +23,13 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     },
 
     selected: function() {
-      dispatcher.trigger('navigate', {
-        route: '/users/' + this.model.get('id'),
-        model: this.model
-      });
+      this.$el.addClass('info');
+      this.trigger('selected', this);
+      dispatcher.trigger('navigate.user.openDetails', this.model);
+    },
+
+    deselect: function() {
+      this.$el.removeClass('info');
     },
 
     close: function() {
@@ -36,7 +39,13 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
 
   var UsersList = Backbone.Collection.extend({
     url: '/api/users',
-    model: UserModel
+    model: UserModel,
+    events: {
+      'selected': 'userSelected'
+    },
+    userSelected: function() {
+      console.log('added');
+    }
   });
 
   var UsersGridView = Backbone.View.extend({
@@ -45,6 +54,7 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     initialize: function() {
       // keep reference to subviews for cleanup
       this.subViews = [];
+      this.selectedRow = null;
     },
 
     render: function() {
@@ -64,12 +74,20 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
       var rowView = new UserRowView({model: user});
       this.$body.append(rowView.render().el);
       this.subViews.push(rowView);
+
+      rowView.on('selected', this.userRowSelected, this);
+    },
+
+    userRowSelected: function(rowView) {
+      if(this.selectedRow)
+        this.selectedRow.deselect();
+
+      this.selectedRow = rowView;
     }
   });
 
   var UserDetailsView = Backbone.View.extend({
     template: _.template($('#user-details-view').html()),
-    className: 'row user-details',
 
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));

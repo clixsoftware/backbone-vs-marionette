@@ -2,7 +2,7 @@
  * View for the menu
  */
 
-define(['jquery', 'underscore', 'backbone', 'dispatcher', 'bootstrap'], function($, _, Backbone, dispatcher) {
+define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbone, dispatcher) {
   var NavMenu = Backbone.View.extend({
     initialize: function() {
       console.log(this.$el);
@@ -14,7 +14,7 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher', 'bootstrap'], function
     navigateTo: function(ev) {
       ev.preventDefault();
       var el = $(ev.target);
-      dispatcher.trigger('navigate', { route: el.attr('href') });
+      dispatcher.trigger(el.data('eventName'));
     },
     initDropdowns: function() {
       this.$el.find('.dropdown-toggle').dropdown();

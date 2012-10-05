@@ -1,10 +1,25 @@
-define(['views/mainContainer', 'views/rootContent'], function(mainContainer, RootContent) {
-  var RootController = function() {};
+define(['dispatcher',
+  'views/mainContainer',
+  'views/rootContent'],
+  function(dispatcher, mainContainer, RootContent) {
 
-  RootController.prototype.showRoot = function() {
-    var rootContent = new RootContent();
-    mainContainer.pushView(rootContent, true);
-  };
+    var RootController = function() {};
 
-  return RootController;
-});
+    var proto = {
+      initEvents: function(router) {
+        dispatcher.on('navigate.root.index', function() {
+          this.showRoot();
+          router.navigate('/');
+        }, this);
+      },
+
+      showRoot: function() {
+        var rootContent = new RootContent();
+        mainContainer.pushView(rootContent, true);
+      }
+    };
+
+    RootController.prototype = proto;
+    return new RootController();
+  }
+);

@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'underscore'], function($, _) {
   var MainContainer = function(container){
     this.container = container;
     this.subViews = [];
@@ -11,17 +11,16 @@ define(['jquery'], function($) {
      */
     this.pushView = function(view, clearStack) {
       var currentView = this.subViews[this.subViews.length-1];
-      if (currentView){
-        currentView.close();
+
+      if (clearStack){
+        this.subViews.length = 0;
+        _.each(this.subViews, function(view) {
+          view.close();
+        });
       }
 
       view.render();
       this.container.html(view.el);
-
-      if(clearStack) {
-        this.subViews.length = 0;
-      }
-
       this.subViews.push(view);
     };
   };

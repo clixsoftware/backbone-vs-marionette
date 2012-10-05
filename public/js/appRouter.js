@@ -4,10 +4,10 @@
 define(['jquery',
   'underscore',
   'backbone',
-  'dispatcher',
-  'views/mainContainer',
-  'views/navMenu'],
-  function($, _, Backbone, dispatcher, mainContainer, NavMenu) {
+  'views/navMenu',
+  'controllers/rootController',
+  'controllers/userController'],
+  function($, _, Backbone, NavMenu, rootController, userController) {
 
     var AppRouter = Backbone.Router.extend({
 
@@ -21,25 +21,23 @@ define(['jquery',
       },
 
       initialize: function(options) {
-        this.userController = options.userController;
-        this.rootController = options.rootController;
-        this.mainContainer = mainContainer;
         this.navMenu = new NavMenu({ el: $('.nav-menu')});
         this.navMenu.initDropdowns();
       },
 
       root: function() {
         console.log('root');
-        this.rootController.showRoot();
+        rootController.showRoot();
       },
 
       users: function(query) {
         console.log('users');
-        this.userController.showUsersGrid();
+        userController.showUsersGrid();
       },
 
       user: function(id) {
         console.log('user details: ' + id);
+        userController.showUserDetails(id);
       },
 
       admins: function(query) {
@@ -55,6 +53,6 @@ define(['jquery',
       }
     });
 
-    return AppRouter;
+    return new AppRouter();
   }
 );
