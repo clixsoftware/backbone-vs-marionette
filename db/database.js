@@ -19,3 +19,13 @@ var getUserByIdSql = getUsersSql + ' where employeeId = ?';
 exports.getUserById = function(id, cb) {
   db.all(getUserByIdSql, [id], cb);
 };
+
+var updateUserSql = 'update employees set lastName = ?, firstName = ?, title = ?, ' +
+'titleOfCourtesy = ?, address = ?, city = ?, region = ?, postalCode = ?, country = ?, ' +
+'homePhone = ? where employeeId = ?';
+
+exports.saveUser = function(user, cb) {
+  db.run(updateUserSql, [user.lastName, user.firstName, user.title, user.titleOfCourtesy,
+    user.address, user.city, user.region, user.postalCode, user.country, user.homePhone, user.id],
+    cb);
+};

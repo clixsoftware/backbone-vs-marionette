@@ -33,7 +33,11 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     },
 
     close: function() {
-      this.off();
+      this.undelegateEvents();
+    },
+
+    onReappear: function() {
+      this.delegateEvents();
     }
   });
 
@@ -49,7 +53,9 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
   });
 
   var UsersGridView = Backbone.View.extend({
-    template: _.template($('#users-grid-view').html()),
+    template: _.template($('#users-grid-view-template').html()),
+
+    className: 'frame container',
 
     initialize: function() {
       // keep reference to subviews for cleanup
@@ -68,6 +74,20 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
       _.each(this.subViews, function(subView) {
         subView.close();
       });
+      this.undelegateEvents();
+    },
+
+    onReappear: function() {
+      if(this.selectedRow)
+        this.selectedRow.deselect();
+
+      this.selectedRow = null;
+
+      _.each(this.subViews, function(subView) {
+        subView.onReappear();
+      });
+
+      this.delegateEvents();
     },
 
     addOne: function(user) {
@@ -87,11 +107,44 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
   });
 
   var UserDetailsView = Backbone.View.extend({
-    template: _.template($('#user-details-view').html()),
+    template: _.template($('#user-details-view-template').html()),
+
+    className: 'frame container',
 
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
       return this;
+    },
+
+    events: {
+      'click .user-details-cancel': 'cancel',
+      'click .user-details-save': 'save'
+    },
+
+    cancel: function(ev) {
+      dispatcher.trigger('navigate.user.closeDetails');
+    },
+
+    save: function(ev) {
+      var self = this;
+      var valFor = function(selector) {
+        return self.$el.find(selector).val();
+      };
+
+      this.model.save({
+        "lastName": valFor('#inputLastName'),
+        "firstName": valFor('#inputFirstName'),
+        "title": valFor('#inputTitle'),
+        "titleOfCourtesy": valFor('#inputTitleOfCourtesy'),
+        "address": valFor('#inputAddress'),
+        "city": valFor('#inputCity'),
+        "region": valFor('#inputRegion'),
+        "postalCode": valFor('#inputPostalCode'),
+        "country": valFor('#inputCountry'),
+        "homePhone": valFor('#inputPhone')
+      });
+
+      dispatcher.trigger('navigate.user.closeDetails');
     },
 
     close: function() {

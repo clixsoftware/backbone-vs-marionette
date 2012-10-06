@@ -17,7 +17,7 @@ define(['dispatcher',
           router.navigate('/users/' + userModel.id);
         }, this);
 
-        dispatcher.on('navigate.pop', function(userModel) {
+        dispatcher.on('navigate.user.closeDetails', function(userModel) {
           this.closeUserDetails();
           router.navigate('/users');
         }, this);
@@ -40,6 +40,7 @@ define(['dispatcher',
 
       showUserDetails: function(userModel) {
         if(!isNaN(userModel)) {
+          // load details as if it were from a route trigger
           console.log('userModel was an id');
           return;
         }
@@ -49,7 +50,7 @@ define(['dispatcher',
       },
 
       closeUserDetails: function() {
-
+        mainContainer.popView();
       }
     };
 

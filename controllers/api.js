@@ -11,3 +11,14 @@ exports.getUser = function(req, res, next) {
     res.json(employee);
   });
 };
+
+exports.saveUser = function(req, res, next) {
+  db.saveUser(req.body, function(err, employee){
+    console.log(err);
+    res.json(err);
+  });
+};
+
+exports.createUser = function(req, res, next) {
+  res.json(req.body);
+};
