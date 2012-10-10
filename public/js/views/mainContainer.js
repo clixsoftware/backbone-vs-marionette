@@ -10,12 +10,13 @@ define(['jquery', 'underscore'], function($, _) {
      *    push the view onto the stack.
      */
     this.pushView = function(view, clearStack) {
-      var currentView = this.subViews[this.subViews.length-1];
+      var currentView = _.last(this.subViews);
 
       if (clearStack){
         this.subViews.length = 0;
         _.each(this.subViews, function(view) {
           view.close();
+          view.remove();
         });
         this.container.empty();
       }
@@ -24,8 +25,10 @@ define(['jquery', 'underscore'], function($, _) {
       this.container.append(view.el);
       this.subViews.push(view);
 
-      var margin = -1 * currentView.$el.width();
-      currentView.$el.animate({ 'margin-left': margin + 'px'}, 500);
+      if (currentView) {
+        var margin = -1 * currentView.$el.width();
+        currentView.$el.animate({ 'margin-left': margin + 'px'}, 400);
+      }
     };
 
     /*
@@ -33,19 +36,25 @@ define(['jquery', 'underscore'], function($, _) {
      * @return: False if nothing was popped from the stack
      */
     this.popView = function(view) {
-      if(this.subViews.length === 1) {
+      var self, currentView, nextView;
+      self = this;
+
+      if(this.subViews.length <= 1) {
+        // there's nothing else to pop. don't pop.
         return false;
       }
 
-      var currentView = this.subViews.pop();
-      currentView.close();
+      currentView = this.subViews.pop();
+      nextView = _.last(this.subViews);
 
-      var nextView = this.subViews[this.subViews.length-1];
+      nextView.$el.animate({ 'margin-left': '0px'}, 400, function() {
+        currentView.close();
+        currentView.remove();
 
-      if(nextView.onReappear)
-        nextView.onReappear();
+        if(nextView.onReappear)
+          nextView.onReappear();
 
-      this.container.html(nextView.el);
+      });
     };
   };
 

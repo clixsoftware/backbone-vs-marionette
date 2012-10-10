@@ -148,7 +148,7 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     },
 
     close: function() {
-      this.off();
+      this.undelegateEvents();
     }
   });
 
