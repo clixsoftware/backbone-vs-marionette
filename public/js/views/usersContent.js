@@ -5,6 +5,9 @@
 define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbone, dispatcher) {
 
   var UserModel = Backbone.Model.extend({
+    initialize: function() {
+      this.on('change', this.collection.userChanged, this);
+    },
     urlRoot: '/api/users'
   });
 
@@ -12,6 +15,10 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
     template: _.template($('#user-row-view').html()),
     tagName: 'tr',
     className: 'grid-row',
+
+    initialize: function() {
+      this.model.on('change', this.render, this);
+    },
 
     render: function() {
       this.$el.html(this.template(this.model.toJSON()));
@@ -44,10 +51,13 @@ define(['jquery', 'underscore', 'backbone', 'dispatcher'], function($, _, Backbo
   var UsersList = Backbone.Collection.extend({
     url: '/api/users',
     model: UserModel,
-    events: {
-      'selected': 'userSelected'
+
+    initialize: function() {
     },
-    userSelected: function() {
+    userUpdated: function(ev) {
+      console.log(ev);
+    },
+    userChanged: function() {
       console.log('added');
     }
   });

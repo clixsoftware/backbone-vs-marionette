@@ -14,8 +14,7 @@ exports.getUser = function(req, res, next) {
 
 exports.saveUser = function(req, res, next) {
   db.saveUser(req.body, function(err, employee){
-    console.log(err);
-    res.json(err);
+    res.end();
   });
 };
 
