@@ -1,17 +1,12 @@
+
 /*
  * Router for the site. Defines the actions to be taken when the pushState (url) changes
  */
-define(['jquery',
-  'underscore',
-  'backbone',
-  'views/navMenu',
-  'controllers/rootController',
-  'controllers/userController'],
-  function($, _, Backbone, NavMenu, rootController, userController) {
+define(['marionette'],
+  function(Marionette) {
+    return Marionette.AppRouter.extend({
 
-    var AppRouter = Backbone.Router.extend({
-
-      routes: {
+      appRoutes: {
         '': 'root',
         'users/:id': 'user',
         'users*query': 'users',
@@ -21,23 +16,23 @@ define(['jquery',
       },
 
       initialize: function(options) {
-        this.navMenu = new NavMenu({ el: $('.nav-menu')});
-        this.navMenu.initDropdowns();
+        // this.navMenu = new NavMenu({ el: $('.nav-menu')});
+        // this.navMenu.initDropdowns();
       },
 
       root: function() {
         console.log('root');
-        rootController.showRoot();
+        // rootController.showRoot();
       },
 
       users: function(query) {
         console.log('users');
-        userController.showUsersGrid();
+        // userController.showUsersGrid();
       },
 
       user: function(id) {
         console.log('user details: ' + id);
-        userController.showUserDetails(id);
+        // userController.showUserDetails(id);
       },
 
       admins: function(query) {
@@ -52,7 +47,5 @@ define(['jquery',
         console.log('reports');
       }
     });
-
-    return new AppRouter();
   }
 );

@@ -4,6 +4,8 @@ require.config({
     underscore: 'vendor/underscore',
     backbone: 'vendor/backbone',
     bootstrap: 'vendor/bootstrap',
+    eventbinder: 'vendor/backbone.eventbinder',
+    wreqr: 'vendor/backbone.wreqr',
     marionette: 'vendor/backbone.marionette'
   },
   shim: {
@@ -15,35 +17,31 @@ require.config({
     'backbone': {
       deps: ['jquery', 'underscore'],
       exports: function($, _) {
-        $.noConflict();
-        _.noConflict();
         _.templateSettings = {
           interpolate: /\{\{=(.+?)\}\}/g,
           evaluate: /\{\{(.+?)\}\}/g
         };
-        return this.Backbone.noConflict();
+        return Backbone;
       }
     },
-    marionette : {
-      exports : 'Backbone.Marionette',
-      deps : ['backbone']
-    }
+    'eventbinder': ['backbone'],
+    'wreqr': ['eventbinder'],
+    'marionette': ['wreqr']
   }
 });
 
 /*
  * Setup the app
  */
-require(['jquery',
- 'backbone',
- 'appRouter',
- 'dispatcher',
- 'controllers/rootController',
- 'controllers/userController'], function($, Backbone, appRouter, dispatcher, rootController, userController){
-    $(document).ready(function() {
-      rootController.initEvents(appRouter);
-      userController.initEvents(appRouter);
-      Backbone.history.start({ pushState: true });
+require(
+  ['app', 'backbone', 'routers/rootRouter', 'controllers/rootController'],
+  function(app, Backbone, RootRouter, rootController) {
+    "use strict";
+
+    app.start();
+    new RootRouter({
+      controller : rootController
     });
+    Backbone.history.start();
   }
 );
