@@ -3,7 +3,8 @@ require.config({
     jquery: 'vendor/jquery',
     underscore: 'vendor/underscore',
     backbone: 'vendor/backbone',
-    bootstrap: 'vendor/bootstrap'
+    bootstrap: 'vendor/bootstrap',
+    marionette: 'vendor/backbone.marionette'
   },
   shim: {
     'jquery': { exports: '$' },
@@ -22,6 +23,10 @@ require.config({
         };
         return this.Backbone.noConflict();
       }
+    },
+    marionette : {
+      exports : 'Backbone.Marionette',
+      deps : ['backbone']
     }
   }
 });
