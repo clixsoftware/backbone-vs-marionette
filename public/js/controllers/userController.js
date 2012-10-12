@@ -1,60 +1,45 @@
-define(['dispatcher',
-  'views/mainContainer',
-  'views/usersContent'],
-  function(dispatcher, mainContainer, UsersContent) {
+define(['vent', 'backbone'],
+  function(vent, Backbone) {
 
-    var UserController = function() {};
-
-    var proto = {
-      initEvents: function(router) {
-        dispatcher.on('navigate.user.index', function() {
-          this.showUsersGrid();
-          router.navigate('/users');
-        }, this);
-
-        dispatcher.on('navigate.user.openDetails', function(userModel) {
-          this.showUserDetails(userModel);
-          router.navigate('/users/' + userModel.id);
-        }, this);
-
-        dispatcher.on('navigate.user.closeDetails', function(userModel) {
-          this.closeUserDetails();
-          router.navigate('/users');
-        }, this);
+    var controller = {
+      users: function(query) {
+        console.log('users');
+        // userController.showUsersGrid();
       },
 
-      showUsersGrid: function() {
-        var usersList = new UsersContent.UsersList();
-        usersList.fetch({
-          success: function(collection, response) {
-            var usersGridView = new UsersContent.UsersGridView({
-              collection: collection
-            });
-            mainContainer.pushView(usersGridView, true);
-          },
-          error: function(collection, xhr) {
-            // ignore error
-          }
-        });
+      user: function(id) {
+        console.log('user details: ' + id);
+        // userController.showUserDetails(id);
       },
 
-      showUserDetails: function(userModel) {
-        if(!isNaN(userModel)) {
-          // load details as if it were from a route trigger
-          console.log('userModel was an id');
-          return;
-        }
-
-        var userDetailsView = new UsersContent.UserDetailsView({ model: userModel });
-        mainContainer.pushView(userDetailsView);
+      admins: function(query) {
+        console.log('admins');
       },
 
-      closeUserDetails: function() {
-        mainContainer.popView();
+      customers: function(query) {
+        console.log('customers');
+      },
+
+      reports: function() {
+        console.log('reports');
       }
     };
 
-    UserController.prototype = proto;
-    return new UserController();
+    /*
+     * Curries the call through to the controller action, passing arguments through
+     * Navigates to the given url first.
+     */
+    var navigate = function(url, action) {
+      return function() {
+        Backbone.history.navigate(url);
+        action.apply(arguments);
+      };
+    };
+
+    vent.bind('navigate:user:index', navigate('/users', controller.users));
+    vent.bind('navigate:admin:index', navigate('/admins', controller.admins));
+    vent.bind('navigate:customer:index', navigate('/customers', controller.customers));
+
+    return controller;
   }
 );

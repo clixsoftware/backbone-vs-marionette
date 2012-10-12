@@ -1,47 +1,28 @@
-require.config({
-  paths: {
-    jquery: 'vendor/jquery',
-    underscore: 'vendor/underscore',
-    backbone: 'vendor/backbone',
-    bootstrap: 'vendor/bootstrap',
-    eventbinder: 'vendor/backbone.eventbinder',
-    wreqr: 'vendor/backbone.wreqr',
-    marionette: 'vendor/backbone.marionette'
-  },
-  shim: {
-    'jquery': { exports: '$' },
-    'bootstrap': { deps: ['jquery'] },
-    'underscore': {
-      exports: '_'
-    },
-    'backbone': {
-      deps: ['jquery', 'underscore'],
-      exports: function($, _) {
-        _.templateSettings = {
-          interpolate: /\{\{=(.+?)\}\}/g,
-          evaluate: /\{\{(.+?)\}\}/g
-        };
-        return Backbone;
-      }
-    },
-    'eventbinder': ['backbone'],
-    'wreqr': ['eventbinder'],
-    'marionette': ['wreqr']
-  }
-});
-
-/*
- * Setup the app
- */
 require(
-  ['app', 'backbone', 'routers/rootRouter', 'controllers/rootController'],
-  function(app, Backbone, RootRouter, rootController) {
+  ['jquery', 'app', 'backbone', 'views/navMenu', 'routers/rootRouter', 'controllers/rootController',
+    'routers/userRouter', 'controllers/userController'],
+  function($, app, Backbone, NavMenuView, RootRouter, rootController,
+    UserRouter, userController) {
     "use strict";
 
-    app.start();
-    new RootRouter({
-      controller : rootController
+    app.addRegions({
+      navMenu: '.header-navbar',
+      mainContainer: '.main-container > .frames'
     });
-    Backbone.history.start();
+
+    app.addInitializer(function() {
+      var navMenuView = new NavMenuView({ el: $('.nav-menu') });
+      navMenuView.initDropdowns();
+      app.navMenu.attachView(navMenuView);
+    });
+
+    $(document).ready(function() {
+      app.start();
+      new RootRouter({ controller: rootController });
+      new UserRouter({ controller: userController });
+
+      Backbone.history.start({pushState: true});
+    });
+
   }
 );
