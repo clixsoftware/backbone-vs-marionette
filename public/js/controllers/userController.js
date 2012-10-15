@@ -1,10 +1,20 @@
-define(['vent', 'backbone'],
-  function(vent, Backbone) {
+define([
+  'app',
+  'vent',
+  'backbone',
+  'controllers/navigate',
+  'views/usersGridView',
+  'models/usersList'],
+
+  function(app, vent, Backbone, navigate, UsersGridView, UsersList) {
 
     var controller = {
       users: function(query) {
         console.log('users');
-        // userController.showUsersGrid();
+        var usersList = new UsersList();
+        var usersGridView = new UsersGridView({ collection: usersList });
+        app.mainContainer.pushView(usersGridView, true);
+        usersList.fetch();
       },
 
       user: function(id) {
@@ -25,17 +35,7 @@ define(['vent', 'backbone'],
       }
     };
 
-    /*
-     * Curries the call through to the controller action, passing arguments through
-     * Navigates to the given url first.
-     */
-    var navigate = function(url, action) {
-      return function() {
-        Backbone.history.navigate(url);
-        action.apply(arguments);
-      };
-    };
-
+    // bind to navigate events
     vent.bind('navigate:user:index', navigate('/users', controller.users));
     vent.bind('navigate:admin:index', navigate('/admins', controller.admins));
     vent.bind('navigate:customer:index', navigate('/customers', controller.customers));
