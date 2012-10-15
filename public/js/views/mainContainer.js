@@ -1,6 +1,6 @@
 define(['jquery', 'underscore'], function($, _) {
   var MainContainer = function(container){
-    this.container = container;
+    this.$el = container;
     this.subViews = [];
 
     /*
@@ -16,13 +16,12 @@ define(['jquery', 'underscore'], function($, _) {
         this.subViews.length = 0;
         _.each(this.subViews, function(view) {
           view.close();
-          view.remove();
         });
-        this.container.empty();
+        this.$el.empty();
       }
 
       view.render();
-      this.container.append(view.el);
+      this.$el.append(view.el);
       this.subViews.push(view);
 
       if (currentView) {
@@ -49,7 +48,6 @@ define(['jquery', 'underscore'], function($, _) {
 
       nextView.$el.animate({ 'margin-left': '0px'}, 400, function() {
         currentView.close();
-        currentView.remove();
 
         if(nextView.onReappear)
           nextView.onReappear();
@@ -58,5 +56,5 @@ define(['jquery', 'underscore'], function($, _) {
     };
   };
 
-  return new MainContainer($('.main-container > .frames'));
+  return MainContainer;
 });
