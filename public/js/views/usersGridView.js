@@ -2,15 +2,14 @@ define(['vent', 'marionette', 'views/userRowView'], function(vent, Marionette, U
 
   return Marionette.CompositeView.extend({
     template: '#users-grid-view-template',
-
     className: 'frame container',
+    itemViewContainer: 'tbody',
+    itemView: UserRowView,
 
     initialize: function() {
       this.selectedRow = null;
+      this.bindTo(this, 'itemview:selected', this.userRowSelected, this);
     },
-
-    itemViewContainer: 'tbody',
-    itemView: UserRowView,
 
     onReappear: function() {
       if(this.selectedRow)
@@ -25,19 +24,12 @@ define(['vent', 'marionette', 'views/userRowView'], function(vent, Marionette, U
       this.delegateEvents();
     },
 
-    addOne: function(user) {
-      var rowView = new UserRowView({model: user});
-      this.$body.append(rowView.render().el);
-      this.subViews.push(rowView);
-
-      rowView.on('selected', this.userRowSelected, this);
-    },
-
     userRowSelected: function(rowView) {
       if(this.selectedRow)
         this.selectedRow.deselect();
 
       this.selectedRow = rowView;
+      vent.trigger('navigate:user:details', rowView.model);
     }
   });
 

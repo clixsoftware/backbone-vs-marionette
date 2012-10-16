@@ -1,5 +1,5 @@
-define(['backbone'], 
-  function(Backbone) {
+define(['backbone', 'underscore'],
+  function(Backbone, _) {
 
     /*
      * Curries the call through to the controller action, passing arguments through
@@ -7,8 +7,9 @@ define(['backbone'],
      */
     return function(url, action) {
       return function() {
-        Backbone.history.navigate(url);
-        action.apply(arguments);
+        var navigateUrl = _.isFunction(url) ? url.apply(this, arguments) : url;
+        Backbone.history.navigate(navigateUrl);
+        action.apply(this, arguments);
       };
     };
   }

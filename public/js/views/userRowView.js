@@ -21,7 +21,6 @@ define(['vent', 'backbone'], function(vent, Backbone) {
     selected: function() {
       this.$el.addClass('info');
       this.trigger('selected', this);
-      vent.trigger('navigate.user.openDetails', this.model);
     },
 
     deselect: function() {

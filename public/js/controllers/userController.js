@@ -36,9 +36,12 @@ define([
     };
 
     // bind to navigate events
-    vent.bind('navigate:user:index', navigate('/users', controller.users));
-    vent.bind('navigate:admin:index', navigate('/admins', controller.admins));
-    vent.bind('navigate:customer:index', navigate('/customers', controller.customers));
+    vent.on('navigate:user:index', navigate('/users', controller.users), controller);
+    vent.on('navigate:user:details', navigate(function(user) {
+      return '/users/' + user.get('id');
+    }, controller.user), controller);
+    vent.on('navigate:admin:index', navigate('/admins', controller.admins), controller);
+    vent.on('navigate:customer:index', navigate('/customers', controller.customers), controller);
 
     return controller;
   }
