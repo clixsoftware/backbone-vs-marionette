@@ -1,17 +1,12 @@
-define(['vent', 'backbone'], function(vent, Backbone) {
+define(['vent', 'marionette'], function(vent, Marionette) {
 
-  return Backbone.View.extend({
-    template: _.template($('#user-row-view').html()),
+  return Marionette.ItemView.extend({
+    template: '#user-row-view',
     tagName: 'tr',
     className: 'grid-row',
 
     initialize: function() {
-      this.model.on('change', this.render, this);
-    },
-
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
+      this.bindTo(this.model, 'change', this.render, this);
     },
 
     events: {

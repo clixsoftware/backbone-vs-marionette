@@ -1,15 +1,8 @@
-define(['vent', 'backbone'], function(Backbone) {
+define(['vent', 'marionette'], function(vent, Marionette) {
 
-  return Backbone.View.extend({
-    template: _.template($('#user-details-view-template').html()),
-
+  return Marionette.ItemView.extend({
+    template: '#user-details-view-template',
     className: 'frame container',
-
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
-    },
-
     events: {
       'click .user-details-cancel': 'cancel',
       'click .user-details-save': 'save'
@@ -39,10 +32,6 @@ define(['vent', 'backbone'], function(Backbone) {
       });
 
       vent.trigger('navigate:user:closeDetails');
-    },
-
-    close: function() {
-      this.undelegateEvents();
     }
   });
   

@@ -1,4 +1,4 @@
-define(['vent', 'marionette', 'views/userRowView'], function(vent, Marionette, UserRowView) {
+define(['underscore', 'vent', 'marionette', 'views/userRowView'], function(_, vent, Marionette, UserRowView) {
 
   return Marionette.CompositeView.extend({
     template: '#users-grid-view-template',
@@ -16,11 +16,6 @@ define(['vent', 'marionette', 'views/userRowView'], function(vent, Marionette, U
         this.selectedRow.deselect();
 
       this.selectedRow = null;
-
-      _.each(this.subViews, function(subView) {
-        subView.onReappear();
-      });
-
       this.delegateEvents();
     },
 
@@ -32,7 +27,5 @@ define(['vent', 'marionette', 'views/userRowView'], function(vent, Marionette, U
       vent.trigger('navigate:user:details', rowView.model);
     }
   });
-
-  
 });
 
