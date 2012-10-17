@@ -1,7 +1,9 @@
 define(['dispatcher',
   'views/mainContainer',
-  'views/usersContent'],
-  function(dispatcher, mainContainer, UsersContent) {
+  'views/usersGridView',
+  'models/usersList',
+  'views/userDetailsView'],
+  function(dispatcher, mainContainer, UsersGridView, UsersList, UserDetailsView) {
 
     var UserController = function() {};
 
@@ -24,10 +26,10 @@ define(['dispatcher',
       },
 
       showUsersGrid: function() {
-        var usersList = new UsersContent.UsersList();
+        var usersList = new UsersList();
         usersList.fetch({
           success: function(collection, response) {
-            var usersGridView = new UsersContent.UsersGridView({
+            var usersGridView = new UsersGridView({
               collection: collection
             });
             mainContainer.pushView(usersGridView, true);
@@ -45,7 +47,7 @@ define(['dispatcher',
           return;
         }
 
-        var userDetailsView = new UsersContent.UserDetailsView({ model: userModel });
+        var userDetailsView = new UserDetailsView({ model: userModel });
         mainContainer.pushView(userDetailsView);
       },
 
