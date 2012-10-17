@@ -9,7 +9,14 @@ app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
+});
+
+// don't use layouts in test env
+if ('test' !== app.get('env')) {
   app.use(expressLayouts);
+}
+
+app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
@@ -25,7 +32,14 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-routes.init(app);
+// don't use layouts in test env
+if ('test' !== app.get('env')) {
+  routes.init(app);
+}
+else {
+  require('./routes/test').init(app);
+}
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));

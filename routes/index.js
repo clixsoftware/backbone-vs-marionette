@@ -4,7 +4,7 @@ var fs = require('fs');
 var files = ['home', 'api'];
 
 exports.init = function(app) {
-  for(i in files) {
+  for(var i in files) {
     var r = require('./' + files[i]);
     r.route(app);
   }
