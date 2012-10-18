@@ -7,6 +7,7 @@ The app uses:
 * [Twitter Bootstrap](http://twitter.github.com/bootstrap/) for basic styling
 * [RequireJS](http://requirejs.org/) for modularizing the javascript code.
 * [{LESS}](http://lesscss.org/) for CSS
+* [mocha](http://visionmedia.github.com/mocha/) for client-side testing (only on the marionette flavor of the app)
 
 Setup
 -----
