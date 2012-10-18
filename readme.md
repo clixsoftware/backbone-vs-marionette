@@ -23,4 +23,5 @@ JS concat/minify
 ----------------
 
 If you want to minify the js
+
     ./node_modules/requirejs/bin/r.js -o app.build.js 
