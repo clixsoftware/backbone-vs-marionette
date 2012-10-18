@@ -11,7 +11,7 @@ The app uses:
 Setup
 -----
 
-# install [node.js}(http://nodejs.org/)
+# install [node.js](http://nodejs.org/)
 # clone this repo
 # `cd backbone-vs-marionette`
 # `npm install`
